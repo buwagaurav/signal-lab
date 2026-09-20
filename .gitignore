@@ -1,0 +1,7 @@
+backend/.env
+backend/.env.production
+backend/.venv/
+backend/signal_lab.db
+backend/logs/
+backend/**/__pycache__/
+*.pyc

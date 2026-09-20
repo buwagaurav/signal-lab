@@ -1,0 +1,14 @@
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+sqlalchemy==2.0.36
+psycopg[binary]==3.2.3
+pydantic-settings==2.7.1
+PyJWT==2.10.1
+pwdlib[argon2]==0.2.1
+python-multipart==0.0.20
+email-validator==2.2.0
+pandas==2.2.3
+breeze-connect==1.0.69
+certifi==2026.7.22
+apscheduler==3.11.3
+pytest==8.3.4

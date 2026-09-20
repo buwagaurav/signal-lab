@@ -1,0 +1,25 @@
+# SignalLab reverse proxy: serves the static frontend and proxies /api/* to
+# the backend container, on the same origin -- no CORS_ORIGINS juggling in
+# production, and the raw API port never needs to be exposed publicly.
+#
+# As shipped, this listens on plain HTTP (:80) for any Host header, which
+# means it works immediately on a bare IP with no DNS setup -- but traffic
+# (including login credentials and JWTs) is unencrypted. Once you have a
+# domain pointed at this server's IP, switch to HTTPS by replacing the
+# ":80 {" line below with your domain, e.g. "signallab.example.com {" --
+# Caddy then requests and renews a real Let's Encrypt certificate
+# automatically. No other config changes needed.
+
+:80 {
+	handle_path /api/* {
+		reverse_proxy api:8000
+	}
+
+	handle {
+		root * /srv/frontend
+		try_files {path} /index.html
+		file_server
+	}
+
+	encode gzip
+}

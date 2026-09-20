@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SignalLab — explainable indicator validation and trading journal." />
+  <title>SignalLab — Indicator validator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">S</span><span>SignalLab</span></div>
+      <p class="sidebar-kicker">PRIVATE PAPER-TRADING WORKSPACE</p>
+      <nav>
+        <button class="nav-item active" data-view="overview"><span>◈</span> Overview</button>
+        <button class="nav-item" data-view="validator"><span>⌁</span> Signal validator</button>
+        <button class="nav-item" data-view="journal"><span>▣</span> Trade journal</button>
+        <button class="nav-item" data-view="risk"><span>◉</span> Risk controls</button>
+      </nav>
+      <div class="sidebar-foot">
+        <div class="security-chip"><span class="status-dot"></span><div><strong>Paper mode</strong><small>No live orders connected</small></div></div>
+        <button class="settings-link" data-view="risk">⚙ Security & settings</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div><p class="eyebrow">NSE / INDICATORS</p><h1 id="page-title">Good morning, trader</h1></div>
+        <div class="top-actions"><span class="market-status"><span class="status-dot" id="marketDot"></span> Market data: <b id="marketStatusText">checking…</b></span><button class="icon-button" title="Notifications">♢</button><div class="avatar">TR</div></div>
+      </header>
+
+      <section id="overview" class="view active-view">
+        <div class="hero-card">
+          <div><p class="eyebrow light">YOUR EDGE, TESTED</p><h2>Make every signal<br /><em>auditable.</em></h2><p class="hero-copy">Validate indicator ideas against history, understand the context, and build trading discipline — without sending a live order.</p><button class="primary-button" data-view="validator">Validate a strategy <span>→</span></button></div>
+          <div class="hero-orbit"><div class="orbit-ring ring-one"></div><div class="orbit-ring ring-two"></div><div class="orbit-core">72<small>signals<br />reviewed</small></div><span class="orbit-dot dot-a"></span><span class="orbit-dot dot-b"></span><span class="orbit-dot dot-c"></span></div>
+        </div>
+
+        <div class="guardrail-banner"><span class="shield">✦</span><div><strong>Guardrail active</strong><span>Paper mode only · Max risk per trade ₹2,500 · AI explanations cannot place orders</span></div><button data-view="risk">Review →</button></div>
+
+        <div class="metric-grid">
+          <div class="metric-card"><span>VALIDATED SIGNALS</span><strong>72</strong><small class="positive">↑ 14% this month</small></div>
+          <div class="metric-card"><span>PAPER P&L</span><strong>₹18,460</strong><small class="positive">↑ 6.8% since start</small></div>
+          <div class="metric-card"><span>BEST SETUP</span><strong>EMA + RSI</strong><small>62% historical hit rate</small></div>
+          <div class="metric-card"><span>DISCIPLINE SCORE</span><strong>84<span class="unit">/100</span></strong><small class="positive">↑ 8 points</small></div>
+        </div>
+
+        <div class="section-heading"><div><p class="eyebrow">RECENT CONTEXT</p><h3>Signals worth reviewing</h3></div><button class="text-button" data-view="validator">See all signals →</button></div>
+        <div class="signal-list">
+          <article class="signal-row"><div class="signal-icon bullish">↗</div><div class="signal-main"><strong>RELIANCE · Bullish continuation</strong><span>EMA 20/50 cross · RSI 58 · Volume 1.4× avg</span></div><div class="signal-score"><span class="score high">78</span><small>confidence</small></div><div class="signal-result positive">+₹1,840</div><span class="row-arrow">›</span></article>
+          <article class="signal-row"><div class="signal-icon neutral">—</div><div class="signal-main"><strong>INFY · Range-bound</strong><span>RSI 49 · ADX 14 · Low volatility</span></div><div class="signal-score"><span class="score medium">54</span><small>confidence</small></div><div class="signal-result muted">Paper only</div><span class="row-arrow">›</span></article>
+          <article class="signal-row"><div class="signal-icon bearish">↘</div><div class="signal-main"><strong>HDFCBANK · Bearish reversal</strong><span>Below VWAP · RSI 41 · Support nearby</span></div><div class="signal-score"><span class="score low">39</span><small>confidence</small></div><div class="signal-result negative">Invalidated</div><span class="row-arrow">›</span></article>
+        </div>
+      </section>
+
+      <section id="validator" class="view">
+        <div class="section-heading page-heading"><div><p class="eyebrow">RULE-BASED ANALYSIS</p><h2>Signal validator</h2><p>Runs against the live backtest API. Deterministic calculations first — AI explanations stay read-only.</p></div><span class="demo-pill" id="dataSourcePill">checking data source…</span></div>
+        <div class="validator-layout">
+          <div class="panel strategy-panel"><div class="panel-header"><div><h3>Build your setup</h3><p>Define rules and test them across historical candles.</p></div><span class="lock-label">⌁ No execution</span></div>
+            <label class="field-label">Instrument<select id="instrument"><option>RELIANCE</option><option>INFY</option><option>HDFCBANK</option><option>NIFTY 50</option></select></label>
+            <div class="rule-label">ENTRY CONDITIONS <span>AND</span></div>
+            <label class="rule-row"><input id="ruleTrend" type="checkbox" checked /><span class="checkbox"></span><span>Close above <b>EMA 50</b></span></label>
+            <label class="rule-row"><input id="ruleRsi" type="checkbox" checked /><span class="checkbox"></span><span>RSI crosses above <b>50</b></span></label>
+            <label class="rule-row"><input id="ruleVolume" type="checkbox" checked /><span class="checkbox"></span><span>Volume above <b>20-day average</b></span></label>
+            <div class="rule-label exit">RISK RULES <span>FIXED</span></div>
+            <div class="split-fields"><label class="field-label">Stop loss<select id="stopLoss"><option value="1.5">1.5 × ATR</option><option value="1">1 × ATR</option><option value="2">2 × ATR</option></select></label><label class="field-label">Target<select id="target"><option value="2">2 × risk</option><option value="1.5">1.5 × risk</option><option value="3">3 × risk</option></select></label></div>
+            <button class="primary-button full" id="runBacktest">Run validation <span>→</span></button>
+            <p class="disclaimer">Backtests are simulations, not predictions. Results exclude live execution risk.</p>
+          </div>
+          <div class="panel results-panel"><div class="panel-header"><div><h3>Validation report</h3><p id="resultSubhead">RELIANCE · Daily · 3 years simulated</p></div><span class="report-status">✓ Complete</span></div><div class="result-hero"><div><span>HISTORICAL HIT RATE</span><strong id="hitRate">62.4%</strong><small id="hitDelta">+4.1% vs baseline</small></div><div class="mini-chart"><i style="height:38%"></i><i style="height:51%"></i><i style="height:44%"></i><i style="height:66%"></i><i style="height:58%"></i><i style="height:72%"></i><i style="height:64%"></i><i style="height:82%"></i><i style="height:75%"></i><i style="height:91%"></i></div></div><div class="result-stats"><div><span>NET P&amp;L</span><b id="netReturn">+24.8%</b></div><div><span>MAX DRAWDOWN</span><b id="drawdown">-8.6%</b></div><div><span>TRADES</span><b id="tradeCount">148</b></div><div><span>AVG R:R</span><b id="rrRatio">1.72</b></div></div><div class="context-box"><span class="sparkle">✦</span><div><strong>Context, not advice</strong><p id="contextText">This setup performed best in trending markets. Avoid treating the 62.4% rate as a forecast; validate on unseen data and paper trade first.</p></div></div><div class="result-footer"><span>Last validated just now</span><button class="text-button" data-view="risk">View assumptions →</button></div></div>
+        </div>
+      </section>
+
+      <section id="journal" class="view"><div class="section-heading page-heading"><div><p class="eyebrow">BEHAVIOUR & PERFORMANCE</p><h2>Trade journal</h2><p>Paper trades are stored by the API — nothing here is a live order.</p></div></div><div class="journal-layout"><div class="panel journal-panel"><div class="panel-header"><div><h3>Recent trades</h3><p>Loaded from <code>GET /trades</code> for this account.</p></div><button class="text-button" id="refreshTrades">↻ Refresh</button></div><form id="quickAddTrade" class="quick-add"><label class="field-label">Instrument<select id="tradeSymbol"><option>RELIANCE</option><option>INFY</option><option>HDFCBANK</option><option>NIFTY 50</option></select></label><label class="field-label">Side<select id="tradeSide"><option value="LONG">Long</option><option value="SHORT">Short</option></select></label><label class="field-label">Quantity<input id="tradeQuantity" type="number" min="1" step="1" placeholder="10" required /></label><label class="field-label">Entry price<input id="tradeEntry" type="number" min="0.01" step="0.01" placeholder="1240.50" required /></label><button class="primary-button" type="submit">+ Add paper trade</button></form><div id="tradeRows"><p class="disclaimer">Loading trades…</p></div></div><div class="panel coach-panel"><div class="coach-icon">✦</div><p class="eyebrow">AI JOURNAL REVIEW</p><h3>Your pattern this week</h3><p class="coach-copy">You followed your written plan on 8 of 10 paper trades. The two deviations both happened after a losing trade.</p><div class="progress"><span style="width:80%"></span></div><div class="coach-meta"><span>Plan adherence</span><b>80%</b></div><button class="secondary-button full">Review my habits</button><p class="ai-note">AI output is advisory, evidence-linked, and cannot place trades.</p></div></div></section>
+
+      <section id="risk" class="view"><div class="section-heading page-heading"><div><p class="eyebrow">SAFETY LAYER</p><h2>Risk & security controls</h2><p>Fail closed when assumptions, data, or limits are missing.</p></div><span class="safe-pill">● PROTECTED</span></div><div class="risk-grid"><div class="panel control-panel"><div class="panel-header"><div><h3>Trading guardrails</h3><p>These controls apply before any paper-trade alert.</p></div><span class="lock-label">🔒 Local</span></div><div class="control-row"><div><strong>Paper mode only</strong><small>Live order APIs are disabled in this MVP.</small></div><label class="toggle on"><input type="checkbox" checked disabled /><span></span></label></div><div class="control-row"><div><strong>Max risk per trade</strong><small>Hard cap for sizing calculations.</small></div><b>₹2,500</b></div><div class="control-row"><div><strong>Daily loss limit</strong><small>Stop alerts when breached.</small></div><b>₹5,000</b></div><div class="control-row"><div><strong>Require stop-loss</strong><small>Signals without a stop are rejected.</small></div><label class="toggle on"><input type="checkbox" checked disabled /><span></span></label></div><div class="control-row"><div><strong>Human confirmation</strong><small>Required before any future broker integration.</small></div><label class="toggle on"><input type="checkbox" checked disabled /><span></span></label></div></div><div class="panel security-panel"><div class="security-heading"><span class="shield large">✦</span><div><h3>Security posture</h3><p>Designed to minimize blast radius.</p></div></div><ul class="security-list"><li><span>✓</span><div><b>Read-only by default</b><small>No broker credentials or live trading in this build.</small></div></li><li><span>✓</span><div><b>Deterministic calculations</b><small>Indicators and P&L are computed in code, not by AI.</small></div></li><li><span>✓</span><div><b>Evidence-linked AI</b><small>Explanations must reference source signals and data.</small></div></li><li><span>✓</span><div><b>Fail-closed alerts</b><small>Missing data, stale prices, or invalid risk blocks a signal.</small></div></li></ul></div></div><div class="architecture-card"><p class="eyebrow">PRODUCTION ARCHITECTURE NEXT</p><div class="arch-flow"><span>Market data adapter</span><i>→</i><span>Indicator engine</span><i>→</i><span>Signal validator</span><i>→</i><span>Risk gate</span><i>→</i><span>Paper broker</span></div><p>For production: isolate broker tokens in a secrets manager, encrypt data at rest, use least-privilege scopes, add audit logs, rate limits, idempotency keys, and independent reconciliation.</p></div></section>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+services:
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      # Individual files, not the repo root -- mounting "." would also serve
+      # backend/.env.production (and everything else) to anyone who requests
+      # that path directly, since Caddy's file_server serves any real file
+      # under its root.
+      - ./index.html:/srv/frontend/index.html:ro
+      - ./app.js:/srv/frontend/app.js:ro
+      - ./styles.css:/srv/frontend/styles.css:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - api
+  api:
+    build: ./backend
+    # Production settings (JWT_SECRET, Breeze creds, CORS_ORIGINS, DATABASE_URL
+    # pointed at the db service below) live here, separate from backend/.env
+    # so a production deploy can never accidentally pick up local dev config
+    # or vice versa. Copy backend/.env.production.example to create it.
+    env_file: ./backend/.env.production
+    expose:
+      - "8000"
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: signal_lab
+      POSTGRES_USER: signal_lab
+      # Change this before deploying anywhere -- and keep backend/.env.production's
+      # DATABASE_URL password in sync with whatever you set here.
+      POSTGRES_PASSWORD: change-me-in-local-env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U signal_lab -d signal_lab"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
+  caddy_data:
+  caddy_config:
